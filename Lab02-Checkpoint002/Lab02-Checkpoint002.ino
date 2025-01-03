@@ -38,6 +38,11 @@ void countBinary(int mode)
 	{
 		count = (count + 1)%16;
 	}
+
+	for(char i = 0; i < 7; i++)
+	{
+		disp_v[i] = (count >> i) & 1;
+	}
 }
 
 void lightRun(int mode)
