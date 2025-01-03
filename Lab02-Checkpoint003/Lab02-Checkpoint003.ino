@@ -30,6 +30,8 @@ char BIN_TO_7SEGMENT2(char A)
 		0x79,
 		0x71
 	};
+
+	return LOOKUPTB[A];
 }
 
 void display7segment(char data)
