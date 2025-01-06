@@ -57,31 +57,18 @@ void setup() {
 	pinMode(DP, OUTPUT);
 	pinMode(digit10, OUTPUT);
 	pinMode(digit01, OUTPUT);
+
+	digitalWrite(digital01, HIGH);
 }
 
 void loop() {
-	int i, dg01, dg10;
-	char tmp;
+	char i, tmp;
 
-	for(i = 0; i<100; i++)
+	for(i = 0; i<16; i++)
 	{
-		dg01 = i % 10;
-		dg10 = i / 10;
-
-		tmp = BIN_TO_7SEGMENT2(dg01);
+		tmp = BIN_TO_7SEGMENT2(i);
 		display7segment(tmp);
 
-		digitalWrite(digit01, HIGH);
-		digitalWrite(digit10, LOW);
-
-		delay(500);
-
-		tmp = BIN_TO_7SEGMENT2(dg10);
-		display7segment(tmp);
-
-		digitalWrite(digit01, LOW);
-		digitalWrite(digit10, HIGH);
-
-		delay(500);
+		delay(1000);
 	}
 }
