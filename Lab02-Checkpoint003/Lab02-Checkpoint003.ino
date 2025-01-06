@@ -9,6 +9,7 @@
 #define digit10 14
 #define digit01 27
 
+int count = 0;
 //-----------------------------------
 char BIN_TO_7SEGMENT2(char A)
 {
@@ -59,6 +60,38 @@ void setup() {
 	pinMode(digit01, OUTPUT);
 }
 
+void countDec(char mode)
+{
+	int dig01, dig10;
+	char tmp;
+
+	dig01 = count % 10;
+	dig10 = count / 10;
+
+	tmp = BIN_TO_7SEGMENT2(dig01);
+	display7segment(tmp);
+
+	digitalWrite(digit01, HIGH);
+	digitalWrite(digit10, LOW);
+	delay(500);
+
+	tmp = BIN_TO7SEGMENT2(dig10);
+	display7segment(tmp);
+
+	digitalWrite(digit01, LOW);
+	digitalWrite(digit10, HIGH);
+	delay(500);
+
+	if(mode)
+	{
+		count++;
+	}
+	else
+	{
+		count--;
+
+	}
+}
 void loop() {
 	int i, dg01, dg10;
 	char tmp;
