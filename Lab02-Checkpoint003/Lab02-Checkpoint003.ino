@@ -84,12 +84,11 @@ void countDec(char mode)
 
 	if(mode)
 	{
-		count++;
+		count = (count + 1)%100;
 	}
 	else
 	{
-		count--;
-
+		count = (count - 1 + 100)%100;
 	}
 }
 void loop() {
