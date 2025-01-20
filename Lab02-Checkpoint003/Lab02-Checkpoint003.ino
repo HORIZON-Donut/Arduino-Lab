@@ -100,33 +100,15 @@ void countHex(char mode)
 
 void countDec(char mode)
 {
-	int dig01, dig10;
-	char tmp;
-
-	dig01 = count % 10;
-	dig10 = count / 10;
-
-	tmp = BIN_TO_7SEGMENT2(dig01);
-	display7segment(tmp);
-
-	digitalWrite(digit01, HIGH);
-	digitalWrite(digit10, LOW);
-	delay(500);
-
-	tmp = BIN_TO7SEGMENT2(dig10);
-	display7segment(tmp);
-
-	digitalWrite(digit01, LOW);
-	digitalWrite(digit10, HIGH);
-	delay(500);
-
 	if(mode)
 	{
-		count = (count + 1)%100;
+		Digit01++;
+		if(Digit01 > 9) {Digit10++; Digit01 = 0;}
 	}
 	else
 	{
-		count = (count - 1 + 100)%100;
+		Digit01--;
+		if(Digit01 < 0) {Digit10--; Digit01 = 0;}
 	}
 }
 void loop() {
