@@ -111,6 +111,7 @@ void countDec(char mode)
 		if(Digit01 < 0) {Digit10--; Digit01 = 0;}
 	}
 }
+
 void loop() {
 	int i, dg01, dg10;
 	char tmp;
