@@ -8,6 +8,8 @@
 #define DP 5
 #define digit10 14
 #define digit01 27
+#define SW3_1 34
+#define SW3_2 35
 
 char Digit01 = 0;
 char Digit10 = 0;
@@ -60,6 +62,9 @@ void setup() {
 	pinMode(DP, OUTPUT);
 	pinMode(digit10, OUTPUT);
 	pinMode(digit01, OUTPUT);
+
+	pinMode(SW3_1, INPUT);
+	pinMode(SW3_2, INPUT);
 }
 
 void Display()
@@ -112,28 +117,17 @@ void countDec(char mode)
 }
 
 void loop() {
-	int i, dg01, dg10;
-	char tmp;
 
-	for(i = 0; i<100; i++)
+	int st1 = digitalRead(SW3_1);
+	int st2 = digitalRead(SW3_2);
+
+	if(st1)
 	{
-		dg01 = i % 10;
-		dg10 = i / 10;
-
-		tmp = BIN_TO_7SEGMENT2(dg01);
-		display7segment(tmp);
-
-		digitalWrite(digit01, HIGH);
-		digitalWrite(digit10, LOW);
-
-		delay(500);
-
-		tmp = BIN_TO_7SEGMENT2(dg10);
-		display7segment(tmp);
-
-		digitalWrite(digit01, LOW);
-		digitalWrite(digit10, HIGH);
-
-		delay(500);
+		countHex(st2);
 	}
+	else
+	{
+		countDec(st2);
+	}
+	Display();
 }
