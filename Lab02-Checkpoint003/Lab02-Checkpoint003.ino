@@ -9,7 +9,6 @@
 #define digit10 14
 #define digit01 27
 
-int count = 0;
 char Digit01 = 0;
 char Digit10 = 0;
 
