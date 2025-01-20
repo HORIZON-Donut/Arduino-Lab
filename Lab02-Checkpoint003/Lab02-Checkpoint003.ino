@@ -10,6 +10,9 @@
 #define digit01 27
 
 int count = 0;
+char Digit01 = 0;
+char Digit10 = 0;
+
 //-----------------------------------
 char BIN_TO_7SEGMENT2(char A)
 {
@@ -58,6 +61,41 @@ void setup() {
 	pinMode(DP, OUTPUT);
 	pinMode(digit10, OUTPUT);
 	pinMode(digit01, OUTPUT);
+}
+
+void Display()
+{
+	char disp_v = 0;
+
+	char tmp01 = BIN_TO_7SEGMENT2(Digit01);
+	char tmp10 = BIN_TO_7SEGMENT2(Digit10);
+
+	for(char i = 0; i < 100; i++)
+	{
+		display7segment(tmp01);
+		digitalWrite(digit01, HIGH);
+		digitalWrite(digit10, LOW);
+		delay(5);
+
+		display7segment(tmp10);
+		digitalWrite(digit01, LOW);
+		digitalWrite(digit10, HIGH);
+		delay(5);
+	}
+}
+
+void countHex(char mode)
+{
+	if(mode)
+	{
+		Digit01++;
+		if(Digit01 > 15){Digit10++; Digit01 = 0;}
+	}
+	else
+	{
+		Digit01--;
+		if(Digit01 < 0) {Digit10--; Digit01 = 0;}
+	}
 }
 
 void countDec(char mode)
