@@ -64,12 +64,12 @@ void Display()
 		display7segment(tmp01);
 		digitalWrite(digit01, HIGH);
 		digitalWrite(digit10, LOW);
-		delay(1);
+		delay(2);
 
 		display7segment(tmp10);
 		digitalWrite(digit01, LOW);
 		digitalWrite(digit10, HIGH);
-		delay(1);
+		delay(2);
 	}
 }
 
