@@ -58,7 +58,7 @@ void setup() {
 	pinMode(digit10, OUTPUT);
 	pinMode(digit01, OUTPUT);
 
-	digitalWrite(digital01, HIGH);
+	digitalWrite(digit01, HIGH);
 }
 
 void loop() {

@@ -24,7 +24,7 @@ void resetLED()
 {
 	for(int i = 0; i < 4; i++)
 	{
-		diap_v[i] = 0;
+		disp_v[i] = 0;
 	}
 }
 
