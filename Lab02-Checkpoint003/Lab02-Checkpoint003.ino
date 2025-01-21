@@ -13,8 +13,8 @@
 #define SW3_2 35
 #define SW3_3 9
 
-char Digit01 = 0;
-char Digit10 = 0;
+int Digit01 = 0;
+int Digit10 = 0;
 
 //-----------------------------------
 char BIN_TO_7SEGMENT2(char A)
@@ -64,12 +64,12 @@ void Display()
 		display7segment(tmp01);
 		digitalWrite(digit01, HIGH);
 		digitalWrite(digit10, LOW);
-		delay(5);
+		delay(1);
 
 		display7segment(tmp10);
 		digitalWrite(digit01, LOW);
 		digitalWrite(digit10, HIGH);
-		delay(5);
+		delay(1);
 	}
 }
 
@@ -83,8 +83,11 @@ void countHex(char mode)
 	else
 	{
 		Digit01--;
-		if(Digit01 < 0) {Digit10--; Digit01 = 0;}
+		if(Digit01 < 0) {Digit10--; Digit01 = 15;}
 	}
+
+  Digit01 = (Digit01 + 16) % 16;
+  Digit10 = (Digit10 + 16) % 16;
 }
 
 void countDec(char mode)
@@ -97,8 +100,11 @@ void countDec(char mode)
 	else
 	{
 		Digit01--;
-		if(Digit01 < 0) {Digit10--; Digit01 = 0;}
+		if(Digit01 < 0) {Digit10--; Digit01 = 9;}
 	}
+
+  Digit01 = (Digit01 + 10) % 10;
+  Digit10 = (Digit10 + 10) % 10;
 }
 
 void loop() {
@@ -106,13 +112,13 @@ void loop() {
 	int st1 = digitalRead(SW3_1);
 	int st2 = digitalRead(SW3_2);
 
-	if(st1)
+	if(st2)
 	{
-		countHex(st2);
+		countDec(st1);
 	}
 	else
 	{
-		countDec(st2);
+		countHex(st1);
 	}
 	Display();
 }
