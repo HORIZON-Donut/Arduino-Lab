@@ -11,11 +11,10 @@ byte customChar5[8] = {B11010, B01101, B00010, B11111, B10001, B10101, B11001, B
 byte customChar6[8] = {B00000, B00000, B00000, B01110, B10001, B01001, B10001, B10001};
 byte customChar7[8] = {B00001, B00011, B11100, B00000, B01110, B10001, B10101, B11001};
 
-void setup() { 
-  lcd.begin(16, 2); 
-  pinMode(12,INPUT);  
-  pinMode(13,OUTPUT); 
- 
+int count;
+
+void printFirstLine()
+{
   lcd.createChar(0, customChar0);
   lcd.createChar(1, customChar1);
   lcd.createChar(2, customChar2);
@@ -25,7 +24,7 @@ void setup() {
   lcd.createChar(6, customChar6);
   lcd.createChar(7, customChar7);
    
-  lcd.setCursor(1,0); 
+  lcd.setCursor(count,0); 
   lcd.write((uint8_t)0);
   lcd.write((uint8_t)1);
   lcd.write((uint8_t)2);
@@ -35,9 +34,38 @@ void setup() {
   lcd.write((uint8_t)6);
   lcd.write((uint8_t)7);
  
-  lcd.print(" Kiettisak"); 
+  lcd.print(" Kiettisak");
+}
+
+void setup() { 
+  lcd.begin(16, 2); 
+  pinMode(12,INPUT);  
+  pinMode(13,OUTPUT); 
+
+  count = 1;
+ 
+  printFirstLine();
   lcd.setCursor(2,1); 
   lcd.print("AI engineer"); 
 } 
  
-void loop() {  } 
+void counting(int n)
+{
+  count += n;
+
+  if(count > 15) {count = 0;}
+  else if (count < 0) {count = 15;}
+}
+
+void loop() {
+
+  lcd.clear();
+  lcd.setCursor(2,1); 
+  lcd.print("AI engineer");
+
+  printFirstLine();
+  delay(100);
+
+  counting(1);
+    
+} 
