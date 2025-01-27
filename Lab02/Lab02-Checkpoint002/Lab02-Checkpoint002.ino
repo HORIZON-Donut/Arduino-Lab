@@ -25,6 +25,7 @@ void resetLED()
 	for(int i = 0; i < 4; i++)
 	{
 		disp_v[i] = 0;
+    disp_v[i] = ~disp_v[i];
 	}
 }
 
@@ -50,11 +51,11 @@ void lightRun(int mode)
 	resetLED();
 	if(mode)
 	{
-		count = (count - 1 + 4)%4;
+		count = (count + 1)%4;
 	}
 	else
 	{
-		count = (count + 1)%4;
+		count = (count - 1 + 4)%4;
 	}
 	disp_v[count] = ~disp_v[count];
 }
@@ -72,13 +73,13 @@ void loop()
 	int st1 = digitalRead(SW3_1);
 	int st2 = digitalRead(SW3_2);
 
-	if(st1)
+	if(st2)
 	{	
-		lightRun(st2);
+		countBinary(st1);
 	}
 	else
 	{
-		countBinary(st2);
+		lightRun(st1);
 	}
 
 	ledWrite();
