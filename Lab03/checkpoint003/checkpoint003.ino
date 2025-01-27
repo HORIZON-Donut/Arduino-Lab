@@ -13,13 +13,13 @@ void setup() {
 
   name = "Kiettisak";
   surname = "Sea-iw   ";
-  length = (name.length() >= surname.length()) ? name.length() : surname.length();
+  length = name.length();
 }
 
 void loop() {
-  for (int i = 0; i < length; i++)
+  for (int i = 1; i <= length; i++)
   {
-    for (int j = 0; j < 16 - i; j ++)
+    for (int j = 0; j <= 16 - i; j ++)
     {
       lcd1.setCursor(j, 0);
       lcd1.print(name[length - i]);
@@ -30,13 +30,15 @@ void loop() {
         lcd1.print(" ");
       }
 
-      lcd1.setCursor(15 - j, 1);
-      lcd1.print(surname[i]);
+      lcd1.setCursor(16 - j, 1);
+      lcd1.print(surname[i - 1]);
 
-      lcd1.setCursor(15 - j + 1, 1);
+      lcd1.setCursor(16 - j + 1, 1);
       lcd1.print(" ");
 
-      delay(100);
+      delay(300);
     }
   }
+
+  while(1);
 }
