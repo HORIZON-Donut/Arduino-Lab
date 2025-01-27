@@ -17,15 +17,26 @@ void setup() {
 }
 
 void loop() {
-  
-  for(int i = 0; i <= name_length; i++)
+  for (int i = 0; i < length; i++)
   {
-    lcd1.setCursor(16 - i, 0);
-    lcd1.print(name[name_length - i]);
+    for (int j = 0; j < 16 - i; j ++)
+    {
+      lcd1.setCursor(j, 0);
+      lcd1.print(name[length - i]);
 
-    lcd1.setCursor(i, 1);
-    lcd1.print(surname[i]);
-    delay(500);
+      if (j !=0 )
+      {
+        lcd1.setCursor(j - 1, 0);
+        lcd1.print(" ");
+      }
+
+      lcd1.setCursor(15 - j, 1);
+      lcd1.print(surname[i]);
+
+      lcd1.setCursor(15 - j + 1, 1);
+      lcd1.print(" ");
+
+      delay(100);
+    }
   }
-
 }
