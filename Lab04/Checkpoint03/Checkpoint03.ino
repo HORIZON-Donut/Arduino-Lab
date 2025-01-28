@@ -69,6 +69,13 @@ void countDec()
 
 
 void loop() {
-	adcVal = analogRead(ADC0_pin);
+	adcVal = analogRead(ADC1_pin);
 	voltage = (adcVal / 4095.00) * 3.3;
+
+	voltage = (voltage + 4106) % 4106;
+	voltage = (voltage == 0) ? 10 : voltage;
+
+	countDec();
+
+	delay(voltage);
 }
