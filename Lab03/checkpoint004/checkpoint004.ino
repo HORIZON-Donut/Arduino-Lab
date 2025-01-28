@@ -17,6 +17,7 @@ int screenWidth = 16;
 
 int pos = 0;
 int count = 0;
+int i = 0;
 
 void setup() { 
   lcd.begin(16, 2); 
@@ -51,21 +52,21 @@ void loop() {
 
   lcd.setCursor(0, 0);
 
-  for (int i = 0; i < screenWidth; i++)
-  {
-    int j = (pos + i) % length;
+  int j = (pos + i) % length;
 
-    if (text[j] >= 0 && text[j] <= 7)
-    {
+  if (text[j] >= 0 && text[j] <= 7)
+  {
       lcd.write(byte(text[j]));
-    }
-    else
-    {
-      lcd.print(text[j]);
-    }
   }
+  else
+  {
+      lcd.print(text[j]);
+  }
+
+  i++;
+  i = (i + screenWidth) % screenWidth;
 
   pos = (pos + 1) % length;
 
-  delay(300);
+  delay(100);
 } 
