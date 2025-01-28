@@ -19,8 +19,8 @@
 
 int adcVal;
 int shifting;
-int Digit01
-int Digit10
+int Digit01;
+int Digit10;
 
 float voltage;
 
