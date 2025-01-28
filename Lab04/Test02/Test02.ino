@@ -91,12 +91,12 @@ int PushSwitch(int n)
 
 void countDec(char mode)
 {
-	if(mode)
+	if(mode == 1)
 	{
 		Digit01++;
 		if(Digit01 > 9) {Digit10++; Digit01 = 0;}
 	}
-	else
+	else if (mode == 0)
 	{
 		Digit01--;
 		if(Digit01 < 0) {Digit10--; Digit01 = 9;}
@@ -110,10 +110,33 @@ void countDec(char mode)
 void loop() {
 	adcVal = analogRead(ADC0_pin);
 	voltage = (adcVal / 4095.00) * 3.3;
-	Serial.print("Value = ");
-	Serial.print(adcVal);
-	Serial.print("		Voltage = ");
-	Serial.println(voltage);
-	Serial.println(" V");
-	delay(1000);
+
+	switch(PushSwitch(voltage))
+	{
+		case 0:
+			countDec(1);
+			break;
+
+		case 1:
+			countDec(0);
+			break;
+
+		case 2:
+			Digit10++;
+			countDec(-1);
+			break;
+
+		case 3:
+			Digit01++;
+			countDec(-1);
+			break;
+
+		case 4:
+			Digit01 = 0;
+			Digit10 = 0;
+			break;
+
+		default:
+			break;
+	}
 }
