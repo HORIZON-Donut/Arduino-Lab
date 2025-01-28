@@ -64,9 +64,29 @@ void setup() {
 	shifting = 200;
 }
 
-int isPushSwitch(int n, int sw)
+int PushSwitch(int n)
 {
-	return (n > (sw - shifting)) || (n < (sw + shifting));
+	int sw;
+
+	if (n < s1 + shifting && n > s1 - shifting)
+		sw = 0;
+	
+	else if (n < s2 + shifting && n > s2 - shifting)
+		sw = 1;
+	
+	else if (n < s3 + shifting && n > s3 - shifting)
+		sw = 2;
+	
+	else if (n < s4 + shifting && n > s4 - shifting)
+		sw = 3;
+	
+	else if (n < s5 + shifting && n > s5 - shifting)
+		sw = 4;
+	
+	else
+		sw = 5;
+
+	return sw;
 }
 
 void countDec(char mode)
