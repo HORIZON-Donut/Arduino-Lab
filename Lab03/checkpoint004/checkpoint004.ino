@@ -53,22 +53,22 @@ void setup() {
 void loop() {
 	int st = digitalRead(SW3_3);
 
-  lcd.setCursor(0, 0);
+  	lcd.setCursor(0, 0);
 
-  for(int i = 0; i < screenWidth; i++)
-  {
-  int j = (pos + i) % length;
+  	for(int i = 0; i < screenWidth; i++)
+  	{
+ 		int j = (pos + i) % length;
 
-  if (text[j] >= 0 && text[j] <= 7)
-  {
-      lcd.write(byte(text[j]));
-  }
-  else
-  {
-      lcd.print(text[j]);
-  }
-  }
-  pos = (pos + 1) % length;
+  		if (text[j] >= 0 && text[j] <= 7)
+  		{
+      		lcd.write(byte(text[j]));
+  		}
+  		else
+  		{
+      		lcd.print(text[j]);
+  		}
+  	}
+  	pos = (pos + 1) % length;
 
-  delay(100);
+  	delay(100);
 } 
