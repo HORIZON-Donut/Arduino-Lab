@@ -18,6 +18,7 @@
 #define s5 1309
 
 int adcVal;
+int shifting;
 float voltage;
 
 int Digit01 = 0;
@@ -56,23 +57,8 @@ void setup() {
 	pinMode(digit01, OUTPUT);
 
 	Serial.begin(115200);
-}
 
-void countHex(char mode)
-{
-	if(mode)
-	{
-		Digit01++;
-		if(Digit01 > 15){Digit10++; Digit01 = 0;}
-	}
-	else
-	{
-		Digit01--;
-		if(Digit01 < 0) {Digit10--; Digit01 = 15;}
-	}
-
-  Digit01 = (Digit01 + 16) % 16;
-  Digit10 = (Digit10 + 16) % 16;
+	shifting = 200;
 }
 
 void countDec(char mode)
