@@ -11,9 +11,11 @@
 #define digit10 14
 #define digit01 27
 
-#define SW3_1 34
-#define SW3_2 35
-#define SW3_3 9
+#define s1 3826
+#define s2 3376
+#define s3 2789
+#define s4 2047
+#define s5 1309
 
 int adcVal;
 float voltage;
