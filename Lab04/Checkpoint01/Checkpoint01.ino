@@ -1,5 +1,5 @@
 int soundPin = 21;
-int ledPin = 32;
+int ledPin = 13;
 unsigned long previous_time = 0;
 
 bool check_clap()
