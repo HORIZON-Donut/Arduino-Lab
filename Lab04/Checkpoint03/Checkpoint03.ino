@@ -58,21 +58,13 @@ void setup() {
 	shifting = 200;
 }
 
-void countDec(char mode)
+void countDec()
 {
-	if(mode == 1)
-	{
-		Digit01++;
-		if(Digit01 > 9) {Digit10++; Digit01 = 0;}
-	}
-	else if (mode == 0)
-	{
-		Digit01--;
-		if(Digit01 < 0) {Digit10--; Digit01 = 9;}
-	}
+	Digit01++;
+	if(Digit01 > 9) {Digit10++; Digit01 = 0;}
 
-  Digit01 = (Digit01 + 10) % 10;
-  Digit10 = (Digit10 + 10) % 10;
+	Digit01 = (Digit01 + 10) % 10;
+	Digit10 = (Digit10 + 10) % 10;
 }
 
 
