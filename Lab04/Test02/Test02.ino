@@ -19,10 +19,11 @@
 
 int adcVal;
 int shifting;
+int Digit01
+int Digit10
+
 float voltage;
 
-int Digit01 = 0;
-int Digit10 = 0;
 
 //-----------------------------------
 char BIN_TO_7SEGMENT2(char A)
@@ -58,6 +59,8 @@ void setup() {
 
 	Serial.begin(115200);
 
+	Digit01 = 0;
+	Digit10 = 0;
 	shifting = 200;
 }
 
