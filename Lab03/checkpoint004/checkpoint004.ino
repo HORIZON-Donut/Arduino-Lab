@@ -1,5 +1,7 @@
 #include <LiquidCrystal.h>  
 
+#define SW3_3 9
+
 LiquidCrystal lcd( 2, 15, 17, 16, 4, 0);                       // RS, E, D4, D5, D6, D7  
 
 byte customChar0[8] = {B00000, B00000, B00000, B00010, B00010, B00010, B00010, B00011};
@@ -22,7 +24,8 @@ int i = 0;
 void setup() { 
   lcd.begin(16, 2); 
   pinMode(12,INPUT);  
-  pinMode(13,OUTPUT); 
+  pinMode(13,OUTPUT);
+  pinMode(SW3_3, INPUT);
 
   lcd.createChar(0, customChar0);
   lcd.createChar(1, customChar1);
@@ -49,6 +52,7 @@ void setup() {
 } 
 
 void loop() {
+	int st = digitalRead(SW3_3);
 
   lcd.setCursor(0, 0);
 
@@ -63,7 +67,12 @@ void loop() {
       lcd.print(text[j]);
   }
 
-  i++;
+  if(st)
+	  i++;
+  else
+	  i--;
+
+
   i = (i + screenWidth) % screenWidth;
 
   pos = (pos + 1) % length;
