@@ -139,4 +139,6 @@ void loop() {
 		default:
 			break;
 	}
+
+	delay(300);
 }
