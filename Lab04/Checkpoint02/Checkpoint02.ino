@@ -48,20 +48,24 @@ void loop() {
 		Serial.print(num_clap);
 		num_clap++;
 
-		if(state == 1)
+		if(state == 2)
 		{
 			state = 0;
 			Serial.println("	LED is turned off");
 		}
 		else
 		{
-			state = 1;
-			Serial.println("	LED is trned on");
+			state++;
 		}
 	}
 
-	if(state == 1)
-		digitalWrite(ledPin, LOW);
-	else
+	if(state == 2)
+	{
 		digitalWrite(ledPin, HIGH);
+		Serial.println("	LED is turned on");
+	}
+	else
+	{
+		digitalWrite(ledPin, LOW);
+	}
 }
