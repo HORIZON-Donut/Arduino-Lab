@@ -1,5 +1,5 @@
 int soundPin = 21; //ต่อกับ GPIO21 (หรือขา SDA) 
-int ledPin = 32; //แสดงผลบน LED0 บนบอร์ด ESP32 Starter Kit 
+int ledPin = 13; //แสดงผลบน LED0 บนบอร์ด ESP32 Starter Kit 
 unsigned long previous_time=0; 
 bool check_clap() 
 { 
