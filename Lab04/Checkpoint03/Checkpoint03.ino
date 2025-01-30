@@ -67,15 +67,32 @@ void countDec()
 	Digit10 = (Digit10 + 10) % 10;
 }
 
+void Display(int n)
+{
+	char disp_v = 0;
+
+	char tmp01 = BIN_TO_7SEGMENT2(Digit01);
+	char tmp10 = BIN_TO_7SEGMENT2(Digit10);
+  n = n*10;
+
+	display7segment(tmp01);
+  digitalWrite(digit01, HIGH);
+	digitalWrite(digit10, LOW);
+	delay(n);
+
+	display7segment(tmp10);
+	digitalWrite(digit01, LOW);
+	digitalWrite(digit10, HIGH);
+	delay(n);
+}
 
 void loop() {
 	adcVal = analogRead(ADC1_pin);
 	voltage = (adcVal / 4095.00) * 3.3;
 
-	voltage = (voltage + 4106) % 4106;
-	voltage = (voltage == 0) ? 10 : voltage;
+	voltage = (voltage > 4105) ? 4105 : voltage;
+	voltage = (voltage < 0) ? 10 : voltage;
 
 	countDec();
-
-	delay(voltage);
+  Display(voltage);
 }
