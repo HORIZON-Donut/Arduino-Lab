@@ -38,7 +38,7 @@ void setup()
 }
 void loop()
 {
- tone(BUZZER_PIN, note[count], noteDurations[count], BUZZER_CHANNEL);
+ tone(BUZZER_PIN, note[count], noteDurations[count]);
  delay(noteDurations[count] * 1.3);
  count++;
  count = count % num;
