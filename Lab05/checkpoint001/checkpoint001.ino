@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <LiquidCrystal.h>
 
-LiquidCrystal lcd(2, 15, 16, 17, 4, 0);
+LiquidCrystal lcd(2, 15, 17, 16, 4, 0);
 
 const int trigPin = 21; //เชื่อมต่อขา Trig เข้ากับขา GPIO21(SDA) ของบอร์ด ESP32
 const int echoPin = 22; //เชื่อมต่อขา Echo เข้ากับขา GPIO22(SCL) ของบอร์ด ESP32
@@ -11,8 +11,10 @@ void setup()
 {
  lcd.begin(16, 2);
  lcd.clear();
+
  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+ Serial.begin(9600);
 }
 void loop()
 {
@@ -25,10 +27,12 @@ void loop()
  distance= duration*0.034/2; //คำนวณค่าระยะห่าง
  Serial.print("Distance: ");
  Serial.println(distance);
+
  lcd.setCursor(2, 0);
  lcd.print("Distance");
  lcd.setCursor(1, 1);
  lcd.print(">>> ");
  lcd.print(distance);
  delay(1000);
+ lcd.clear();
 }
