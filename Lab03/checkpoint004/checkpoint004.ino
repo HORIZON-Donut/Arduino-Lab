@@ -70,5 +70,20 @@ void loop() {
   	}
   	pos = (pos + 1) % length;
 
+	for(int i = 0; i < screenWidth; i++)
+  	{
+ 		int j = (pos + i + length) % length;
+
+  		if (text[j] >= 0 && text[j] <= 7)
+  		{
+      		lcd.write(byte(text[j]));
+  		}
+  		else
+  		{
+      		lcd.print(text[j]);
+  		}
+  	}
+  	pos = (pos - 1 + length) % length;
+
   	delay(100);
 } 
