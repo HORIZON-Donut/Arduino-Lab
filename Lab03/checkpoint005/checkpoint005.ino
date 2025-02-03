@@ -33,16 +33,16 @@ void loop() {
 	}
 	
   	lcd1.setCursor(1, 0); 
- 	lcd1.print("Humidity: "); 
+ 	lcd1.print("Humidity:"); 
 	lcd1.print(h);
 	lcd1.print("%");
 	
  	lcd1.setCursor(1, 1); 
-  	lcd1.print("Temperature: ");
+  	lcd1.print("T: ");
 	lcd1.print(t):
-	lcd1.print(" *C ");
+	lcd1.print("C ");
 	lcd1.print(f);
-	lcd1.print(" *F");
+	lcd1.print("F");
 	
 	delay(1000);
   	lcd1.clear();
