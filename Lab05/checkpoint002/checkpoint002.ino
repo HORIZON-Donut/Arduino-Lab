@@ -4,7 +4,7 @@
 #define BUZZER_CHANNEL 0
 #define silence 500
 
-int note = {
+int note[] = {
   NOTE_G4, NOTE_A4, NOTE_B4, NOTE_G4,
   NOTE_F4, NOTE_G4, NOTE_A4, NOTE_F4,
   NOTE_E4, NOTE_F4, NOTE_G4, NOTE_E4,
@@ -28,17 +28,17 @@ int noteDurations[] = {
   1000, 1000
 };
 
+int count;
+int num;
+
 void setup()
 {
- for(int i = 0;i < 10;i++)
- {
- tone(BUZZER_PIN, NOTE_C4, 500, BUZZER_CHANNEL);
- tone(BUZZER_PIN, NOTE_F5, 500, BUZZER_CHANNEL);
- }
- delay(5000);
+ num = sizeof(note)/sizeof(note[1]);
+ count = 0;
 }
 void loop()
 {
- tone(BUZZER_PIN, NOTE_C4, 500, BUZZER_CHANNEL);
- delay(silence);
+ tone(BUZZER_PIN, note[count], noteDuration[count]*1.3, BUZZER_CHANNEL);
+ count++;
+ count = count % num;
 }
