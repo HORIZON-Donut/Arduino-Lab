@@ -58,6 +58,65 @@ void display_date_serial_monitor(void)
     Serial.println(); 
 }
 
+void setTime()
+{
+  int digit01 = 0;
+  int digit10 = 0;
+  int nextDigit = 0;
+  
+  while(1)
+  {
+    char key = keypad.getKey();
+    if(key == 'A')
+    {
+      break;
+    }
+    else
+    {
+      if(nextDigit == 0)
+      {
+        digit01 = (int)keypad.getKeyNum();
+        nextDigit+= 1;
+      }
+      else
+      {
+        digit10 = (int)keypad.getKeyNum();
+        nextDigit = 0;
+      }
+    }
+
+    hour = digit01 * 10 + digit10;
+    display_date_LCD();
+    delay(100);
+  }
+
+    while(1)
+  {
+    char key = keypad.getKey();
+    if(key == 'A')
+    {
+      break;
+    }
+    else
+    {
+      if(nextDigit == 0)
+      {
+        digit01 = (int)keypad.getKeyNum();
+        nextDigit+= 1;
+      }
+      else
+      {
+        digit10 = (int)keypad.getKeyNum();
+        nextDigit = 0;
+      }
+    }
+
+    minute = digit01 * 10 + digit10;
+    display_date_LCD();
+    delay(100);
+  }
+}
+
 void setup ()  
 {
   hour = 0;
