@@ -64,5 +64,14 @@ void setup()
   reset();
 }
 
-void loop() {
+void loop()
+{
+  uint8_t buttons = readButtons();
+
+  for(uint8_t position = 0; position < 8; position++)
+  {
+    uint8_t mask = 0x1 << position;
+
+    setLed(buttons & mask ? 1 : 0, position);
+  }
 }
