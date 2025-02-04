@@ -35,7 +35,14 @@ void reset()
   digitalWrite(strobe_pin, HIGH);
 }
 
-void setup() {
+void setup()
+{
+  pinMode(strobe_pin, OUTPUT);
+  pinMode(clock_pin, OUTPUT);
+  pinMode(data_pin, OUTPUT);
+
+  sendCommand(0x8f);  // activate
+  reset();
 }
 
 void loop() {
