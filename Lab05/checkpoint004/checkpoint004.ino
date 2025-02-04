@@ -35,6 +35,25 @@ void reset()
   digitalWrite(strobe_pin, HIGH);
 }
 
+uint8_t readButtons(void)
+{
+  uint8_t buttons = 0;
+  digitalWrite(strobe_pin, LOW);
+  shiftOutMod(data_pin, clock_pin, LSBFIRST, CLOCK_TYPE, CLOCK_DELAY_US, 0x42);
+
+  pinMode(data_pin, INPUT);
+
+  for (uint8_t i = 0; i < 4; i++)
+  {
+    uint8_t v = shiftInMod(data_pin, clock_pin, LSBFIRST, CLOCK_TYPE, CLOCK_DELAY_US) << i;
+    buttons |= v;
+  }
+
+  pinMode(data_pin, OUTPUT);
+  digitalWrite(strobe_pin, HIGH);
+  return buttons;
+}
+
 void setup()
 {
   pinMode(strobe_pin, OUTPUT);
