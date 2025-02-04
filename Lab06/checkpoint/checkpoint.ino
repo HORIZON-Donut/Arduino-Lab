@@ -86,11 +86,13 @@ void setTime()
     }
 
     hour = digit01 * 10 + digit10;
+    hour = (hour > 23) ? 23 : hour;
     display_date_LCD();
-    delay(100);
+    delay(200);
   }
 
-    while(1)
+  nextDigit = 0;
+  while(1)
   {
     char key = keypad.getKey();
     if(key == 'A')
@@ -112,8 +114,9 @@ void setTime()
     }
 
     minute = digit01 * 10 + digit10;
+    minute = (minute > 59) ? 59 : minute;
     display_date_LCD();
-    delay(100);
+    delay(200);
   }
 }
 
