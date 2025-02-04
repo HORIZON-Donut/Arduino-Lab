@@ -1,37 +1,22 @@
 #include <Keypad_I2C.h> 
-#include <Keypad.h> 
 #include <Wire.h> 
  
-#define I2CADDR 0x20 
- 
- 
-const byte ROWS = 4; 
-const byte COLS = 4; 
- 
-char hexaKeys[ROWS][COLS] = { 
-  {'1','2','3','A'}, 
-  {'4','5','6','B'}, 
-  {'7','8','9','C'}, 
-  {'*','0','#','D'} 
-}; 
-byte rowPins[ROWS] = {7, 6, 5, 4}; 
-byte colPins[COLS] = {3, 2, 1, 0}; 
- 
-Keypad_I2C keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS, I2CADDR);  
+#define I2CADDR 0x20  
+Keypad_I2C keypad(I2CADDR, 2);  
  
 void I2C_bus_scan(void); 
  
 void setup(){ 
   Wire.begin( ); 
   keypad.begin( ); 
-  Serial.begin(38400); 
+  Serial.begin(9600); 
  
   I2C_bus_scan(); 
 } 
    
 void loop(){   
   char key = keypad.getKey(); 
-  if (key != NO_KEY){     
+  if (key !=0){     
     Serial.print(key); 
     Serial.println(" is pressed"); 
   } 
