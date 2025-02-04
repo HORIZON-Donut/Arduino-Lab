@@ -64,14 +64,13 @@ void setup()
   reset();
 }
 
-void LeftToRight()
+void movingLED(int num)
 {
-  //
-}
-
-void RightToLeft()
-{
-  //
+  for(uint8_t position = 0; position < 8; position++)
+  {
+    //
+    delay(100);
+  }
 }
 
 void loop()
@@ -87,13 +86,13 @@ void loop()
       case 0:
         if(buttons & mask)
         {
-          LeftToRight();
+          movingLED(0);
         }
         break;
       case 7:
         if(button & mask)
         {
-          RightToLeft();
+          movingLED(1);
         }
         break;
 
