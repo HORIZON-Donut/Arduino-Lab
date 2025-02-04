@@ -64,6 +64,16 @@ void setup()
   reset();
 }
 
+void LeftToRight()
+{
+  //
+}
+
+void RightToLeft()
+{
+  //
+}
+
 void loop()
 {
   uint8_t buttons = readButtons();
@@ -71,17 +81,24 @@ void loop()
   for(uint8_t position = 0; position < 8; position++)
   {
     uint8_t mask = 0x1 << position;
-
+    
     switch(position)
     {
       case 0:
-        //
+        if(buttons & mask)
+        {
+          LeftToRight();
+        }
         break;
       case 7:
-        //
+        if(button & mask)
+        {
+          RightToLeft();
+        }
         break;
+
       default:
-        setLed(buttons & mask ? 1 : 0, position);
-    } 
+        setLed(buttons & mask ? 1 : 0, position); 
+    }
   }
 }
