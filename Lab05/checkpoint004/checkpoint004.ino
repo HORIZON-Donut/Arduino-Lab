@@ -72,6 +72,16 @@ void loop()
   {
     uint8_t mask = 0x1 << position;
 
-    setLed(buttons & mask ? 1 : 0, position);
+    switch(position)
+    {
+      case 0:
+        //
+        break;
+      case 7:
+        //
+        break;
+      default:
+        setLed(buttons & mask ? 1 : 0, position);
+    } 
   }
 }
