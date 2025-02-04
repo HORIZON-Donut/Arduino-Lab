@@ -13,8 +13,9 @@ Keypad_I2C keypad(I2CADDR, 2);
 int hour;
 int minute;
 int isSet;
+int isSetting;
 
-void display_date_LCD(void)
+void display_date_LCD(int n, value)
 {
   now = rtc.now();
   lcd.clear();
@@ -24,25 +25,31 @@ void display_date_LCD(void)
   lcd.print(now.minute(), DEC);
   lcd.print(':');
   lcd.print(now.second(), DEC);
-  lcd.setCursor(1, 1);
-  lcd.print(hour);
-  lcd.print(':');
-  lcd.print(minute);
 
-  lcd.setCursor(9, 1);
-  switch(isSet)
+  if(n == 0)
   {
-    case 0:
-      lcd.print("Off");
-      break;
-
-    case 1:
-      lcd.print("On");
-      break;
-
-    default:
-      lcd.print("Off");
-      break;
+    
+  }
+  else if(n == 1)
+  {
+    lcd.setCursor(1, 1);
+    lcd.print(value);
+  
+    lcd.setCursor(9, 1);
+    switch(isSet)
+    {
+      case 0:
+        lcd.print("Off");
+        break;
+  
+      case 1:
+        lcd.print("On");
+        break;
+  
+      default:
+        lcd.print("Off");
+        break;
+    }
   }
 }
 
@@ -58,66 +65,56 @@ void display_date_serial_monitor(void)
     Serial.println(); 
 }
 
-void setTime()
+int GetNumber()
 {
   int digit01 = 0;
   int digit10 = 0;
   int nextDigit = 0;
   
-  while(1)
+  while(isSetting)
   {
     char key = keypad.getKey();
+    if(key == '#')
+    {
+      isSet = 1;
+      isSetting = 0;
+      break;
+    }
     if(key == 'A')
     {
       break;
     }
-    else
+    if(key <= '9' && key <= '0')
     {
       if(nextDigit == 0)
       {
-        digit01 = (int)keypad.getKeyNum();
+        digit01 = (int)key();
         nextDigit+= 1;
       }
       else
       {
-        digit10 = (int)keypad.getKeyNum();
+        digit10 = (int)key();
         nextDigit = 0;
       }
     }
-
-    hour = digit01 * 10 + digit10;
-    hour = (hour > 23) ? 23 : hour;
-    display_date_LCD();
+    lcd.print(digit01);
+    lcd.print(digit10);
+    display_date_LCD(1, digit01 * 10 + digit10);
     delay(200);
   }
 
-  nextDigit = 0;
-  while(1)
-  {
-    char key = keypad.getKey();
-    if(key == 'A')
-    {
-      break;
-    }
-    else
-    {
-      if(nextDigit == 0)
-      {
-        digit01 = (int)keypad.getKeyNum();
-        nextDigit+= 1;
-      }
-      else
-      {
-        digit10 = (int)keypad.getKeyNum();
-        nextDigit = 0;
-      }
-    }
+  return digit01 * 10 + digit10;
+}
 
-    minute = digit01 * 10 + digit10;
-    minute = (minute > 59) ? 59 : minute;
-    display_date_LCD();
-    delay(200);
-  }
+void setTime()
+{
+  hour = GetNumber();
+  hour = (hour > 23) ? 23:hour;
+
+  minute = GetNumber();
+  minute = (minute > 59) ? 59:minute;
+
+  isSetting = 1;
 }
 
 void setup ()  
@@ -125,6 +122,7 @@ void setup ()
   hour = 0;
   minute = 0;
   isSet = 0;
+  isSetting = 1;
   
   lcd.begin(16, 2);
   lcd.clear();
@@ -151,7 +149,7 @@ void loop ()
   char key = keypad.getKey(); 
   
   display_date_serial_monitor();
-  display_date_LCD();
+  display_date_LCD(0, 0);
 
   switch(key)
   {
