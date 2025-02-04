@@ -33,7 +33,8 @@ bool isSet;
 //Prototype function
 void I2C_bus_scan(void);
 void SetAlarm(void);
-void StopAlarm(void); 
+void StopAlarm(void);
+bool isAlarm(void); 
 
 void setup() {
   hours = 0;
@@ -81,19 +82,19 @@ void display_date_serial_monitor(void)
   lcd.clear();
   lcd.setCursor(1, 0);
   now = rtc.now();
-  lcd.print(now.year(), DEC);     
+  lcd.print(now.year());     
   lcd.print('/'); 
-  lcd.print(now.month(), DEC);     
+  lcd.print(now.month());     
   lcd.print('/'); 
-  lcd.print(now.day(), DEC);  
+  lcd.print(now.day());  
   lcd.print(':');
   lcd.print(daysOfTheWeek[now.dayOfTheWeek()]);
   lcd.setCursor(2, 0);
-  lcd.print(now.hour(), DEC); 
+  lcd.print(now.hour()); 
   lcd.print(':'); 
-  lcd.print(now.minute(), DEC); 
+  lcd.print(now.minute()); 
   lcd.print(':'); 
-  lcd.print(now.second(), DEC); 
+  lcd.print(now.second()); 
 } 
 
 void loop() {
@@ -136,4 +137,4 @@ void I2C_bus_scan(void)
   lcd.print ("Found "); 
   lcd.print(count, DEC); 
   lcd.print(" device(s)."); 
-}   
+}
