@@ -154,10 +154,10 @@ void loop ()
   switch(key)
   {
     case 'A':
-      //
+      setTime();
       break;
     case 'C':
-      //
+      isSet = 0;
       break;
     default:
       //
