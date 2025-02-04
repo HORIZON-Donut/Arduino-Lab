@@ -68,8 +68,10 @@ void movingLED(int num)
 {
   for(uint8_t position = 0; position < 8; position++)
   {
-    setLed(1, position);
+    uint8_t pos = (num == 0) ? position:(7 - position);
+    setLed(1, pos);
     delay(100);
+    setLed(0, pos);
   }
 }
 
