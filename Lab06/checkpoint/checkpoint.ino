@@ -57,6 +57,10 @@ void display_date_serial_monitor(void)
 
 void setup ()  
 {
+  hour = 0;
+  minute = 0;
+  isSet = 0;
+  
   lcd.begin(16, 2);
   lcd.clear();
   
