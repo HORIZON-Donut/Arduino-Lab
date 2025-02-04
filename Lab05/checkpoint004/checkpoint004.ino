@@ -68,7 +68,7 @@ void movingLED(int num)
 {
   for(uint8_t position = 0; position < 8; position++)
   {
-    //
+    setLed(1, position);
     delay(100);
   }
 }
@@ -90,7 +90,7 @@ void loop()
         }
         break;
       case 7:
-        if(button & mask)
+        if(buttons & mask)
         {
           movingLED(1);
         }
