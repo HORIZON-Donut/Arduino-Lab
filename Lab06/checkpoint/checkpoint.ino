@@ -21,15 +21,25 @@ byte colPins[COLS] = {3, 2, 1, 0};
 
 RTC_DS1307 rtc; 
 Keypad_I2C keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS, I2CADDR); 
+LiquidCrystal lcd(2, 15, 17, 16, 4, 0);
 char daysOfTheWeek[7][4] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}; 
 DateTime now;
 
-//Prototype function
-void I2C_bus_scan(void); 
+int hours;
+int minute;
 
-LiquidCrystal lcd(2, 15, 17, 16, 4, 0);
+bool isSet;
+
+//Prototype function
+void I2C_bus_scan(void);
+void SetAlarm(void);
+void StopAlarm(void); 
+
 void setup() {
-  
+  hours = 0;
+  minute = 0;
+  isSet = false;
+ 
   Wire.begin();
   keypad.begin();
   lcd.begin(16, 2);
