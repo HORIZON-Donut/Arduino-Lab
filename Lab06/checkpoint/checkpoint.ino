@@ -90,5 +90,10 @@ void loop ()
   
   display_date_serial_monitor();
   display_date_LCD();
+
+  if(key != 0)
+  {
+    //
+  }
   delay(5000);
 }
