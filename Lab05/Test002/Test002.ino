@@ -1,4 +1,3 @@
-
 #include "wiring_shift_mod.h"
 
 #define CLOCK_TYPE CLOCK_INVERT
