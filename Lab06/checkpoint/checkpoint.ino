@@ -91,9 +91,17 @@ void loop ()
   display_date_serial_monitor();
   display_date_LCD();
 
-  if(key != 0)
+  switch(key)
   {
-    //
+    case 'A':
+      //
+      break;
+    case 'C':
+      //
+      break;
+    default:
+      //
+      break;
   }
   delay(5000);
 }
