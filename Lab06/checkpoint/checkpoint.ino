@@ -1,167 +1,341 @@
-#include <Wire.h> 
+#include <Keypad_I2C.h>
+#include <Keypad.h>
+#include <Wire.h>
+#include "RTClib.h"
+#include <map>
 #include <LiquidCrystal.h>
+ // RS E D4 D5 D6 D7
+LiquidCrystal lcd1( 2, 15, 17, 16, 4, 0 );
 
-#include "RTClib.h" 
+RTC_DS1307 rtc;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+"Saturday"};
+DateTime now;
 
-#define I2CADDR 0x20  
+#define BUZZER_PIN 12
+#define I2CADDR 0x20
+const byte ROWS = 4;
+const byte COLS = 4;
+char hexaKeys[ROWS][COLS] = {
+ {'1','2','3','A'},
+ {'4','5','6','B'},
+ {'7','8','9','C'},
+ {'*','0','#','D'}
+};
+byte rowPins[ROWS] = {7, 6, 5, 4};
+byte colPins[COLS] = {3, 2, 1, 0};
+Keypad_I2C keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS, I2CADDR);
+void I2C_bus_scan(void);
 
-LiquidCrystal lcd(2, 15, 17, 16, 4, 0); 
-RTC_DS1307 rtc; 
-DateTime now; 
-Keypad_I2C keypad(I2CADDR, 2); 
+int h = 0;
+int m = 0;
+int alarm_time = 0;
+int a = 0;
+int state = 0;
+int set_time = 0;
+unsigned long previousMillis = 0;
+const long interval = 500;
+std::map<char, int> num = {
+    {'0', 0},
+    {'1', 1},
+    {'2', 2},
+    {'3', 3},
+    {'4', 4},
+    {'5', 5},
+    {'6', 6},
+    {'7', 7},
+    {'8', 8},
+    {'9', 9}
+};
 
-int hour;
-int minute;
-int isSet;
-int isSetting;
+void setup(){
+ Wire.begin( );
+ keypad.begin( );
+ Serial.begin(38400);
+ I2C_bus_scan();
+ lcd1.begin(16, 2); // จอกว้าง 16 ตัวอักษร 2 บรรทัด
+ lcd1.clear(); // ล้างหน้าจอ
 
-void display_date_LCD(int n, value)
-{
-  now = rtc.now();
-  lcd.clear();
-  lcd.setCursor(1, 0);
-  lcd.print(now.hour(), DEC);
-  lcd.print(':');
-  lcd.print(now.minute(), DEC);
-  lcd.print(':');
-  lcd.print(now.second(), DEC);
+ if (! rtc.begin()) {
+ Serial.println("Couldn't find RTC");
+ while (1);
+ }
+ if (!rtc.isrunning()) {
+ Serial.println("RTC lost power, lets set the time!");
 
-  if(n == 0)
-  {
-    
-  }
-  else if(n == 1)
-  {
-    lcd.setCursor(1, 1);
-    lcd.print(value);
-  
-    lcd.setCursor(9, 1);
-    switch(isSet)
-    {
-      case 0:
-        lcd.print("Off");
-        break;
-  
-      case 1:
-        lcd.print("On");
-        break;
-  
-      default:
-        lcd.print("Off");
-        break;
-    }
-  }
+ // Comment out below lines once you set the date & time.
+ // Following line sets the RTC to the date & time this sketch was compiled
+ rtc.adjust(DateTime(F(_DATE_), F(_TIME_))); 
+
+ // Following line sets the RTC with an explicit date & time
+ // for example to set January 27 2017 at 12:56 you would call:
+ // rtc.adjust(DateTime(2017, 1, 27, 12, 56, 0));
+ }
 }
 
-void display_date_serial_monitor(void) 
-{ 
-    now = rtc.now(); 
-    Serial.print(now.hour(), DEC); 
-    Serial.print(':'); 
-    Serial.print(now.minute(), DEC); 
-    Serial.print(':'); 
-    Serial.print(now.second(), DEC); 
-    Serial.println(); 
-    Serial.println(); 
-}
+void loop(){
+ char key = keypad.getKey();
+ now = rtc.now();
+//  int c_h = now.hour();
+//  int c_m = now.minute();
 
-int GetNumber()
-{
-  int digit01 = 0;
-  int digit10 = 0;
-  int nextDigit = 0;
-  
-  while(isSetting)
-  {
-    char key = keypad.getKey();
-    if(key == '#')
-    {
-      isSet = 1;
-      isSetting = 0;
-      break;
-    }
-    if(key == 'A')
-    {
-      break;
-    }
-    if(key <= '9' && key <= '0')
-    {
-      if(nextDigit == 0)
-      {
-        digit01 = (int)key();
-        nextDigit+= 1;
+ show_time();
+
+ if (key != NO_KEY){
+ Serial.print(key);
+ Serial.println(" is pressed");
+ }
+
+ if (key == 'A') {
+  a = 0;
+  state = 0;
+  set_time = 1;
+  while(set_time) {
+    while (a == 0) {
+      unsigned long currentMillis = millis();
+      key = keypad.getKey();
+      if (currentMillis - previousMillis >= interval) {
+        previousMillis = currentMillis;
+        if (state == 0) {
+          notime_11();
+        }
+        else if (state == 1) {
+          notime_12();
+        }
+        }
+      else if (currentMillis - previousMillis >= interval / 2) {
+        show_time();
       }
-      else
-      {
-        digit10 = (int)key();
-        nextDigit = 0;
+      
+      if (key >= '0' && key <= '2' && state == 0) {
+        h = h % 10 + num[key] * 10;
+        state = 1;
+      }
+      else if (key >= '0' && key <= '3' && state == 1 && h / 10 == 2) {
+        h = ((h / 10) % 10) * 10 + num[key];
+        state = 0;
+      }
+      else if (key >= '0' && key <= '9' && state == 1 && h / 10 != 2) {
+        h = ((h / 10) % 10) * 10 + num[key];
+        state = 0;
+      }
+      else if (key == 'A') {
+        a = 1;
+        state = 0;
+      }
+      else if (key == '#') {
+        alarm_time = 1;
+        set_time = 0;
+        break;
       }
     }
-    lcd.print(digit01);
-    lcd.print(digit10);
-    display_date_LCD(1, digit01 * 10 + digit10);
-    delay(200);
+    while (a == 1) {
+      // a = (a > 1) ? 0 : a;
+      unsigned long currentMillis = millis();
+      key = keypad.getKey();
+      if (currentMillis - previousMillis >= interval) {
+        previousMillis = currentMillis;
+        if (state == 0) {
+          notime_21();
+        }
+        else if (state == 1) {
+          notime_22();
+        }
+        }
+      else if (currentMillis - previousMillis >= interval / 2) {
+        show_time();
+      }
+      
+      if (key >= '0' && key <= '5' && state == 0) {
+        m = m % 10 + num[key] * 10;
+        state = 1;
+      }
+      else if (key >= '0' && key <= '9' && state == 1) {
+        m = ((m / 10) % 10) * 10 + num[key];
+        state = 0;
+      }
+      else if (key == 'A') {
+        a = 0;
+        state = 0;
+      }
+      else if (key == '#') {
+        alarm_time = 1;
+        set_time = 0;
+        break;
+      }
+    }
   }
+ }
 
-  return digit01 * 10 + digit10;
-}
+ else if (key == 'C' && alarm_time == 1) {
+  alarm_time = 0;
+ }
 
-void setTime()
-{
-  hour = GetNumber();
-  hour = (hour > 23) ? 23:hour;
+  else if (key == 'C' && alarm_time == 0) {
+  alarm_time = 1;
+ }
 
-  minute = GetNumber();
-  minute = (minute > 59) ? 59:minute;
+ else if (now.hour() == h && now.minute() == m && alarm_time == 1) {
+  while (true) {
+    unsigned long currentMillis = millis();
+    key = keypad.getKey();
+    if (currentMillis - previousMillis >= interval * 2) {
+      previousMillis = currentMillis;
+      lcd1.clear();
+      noTone(BUZZER_PIN);
+      }
+    else if (currentMillis - previousMillis >= interval) {
+      show_time();
+      tone(BUZZER_PIN, 1000, 500);
+    }
 
-  isSetting = 1;
-}
-
-void setup ()  
-{
-  hour = 0;
-  minute = 0;
-  isSet = 0;
-  isSetting = 1;
-  
-  lcd.begin(16, 2);
-  lcd.clear();
-
-  Wire.begin( ); 
-  keypad.begin( );
-  
-  Serial.begin(9600); 
-  delay(3000); // wait for console opening 
- 
-  if (! rtc.begin()) { 
-    Serial.println("Couldn't find RTC"); 
-    while (1); 
-  } 
- 
-  if (!rtc.isrunning()) { 
-    Serial.println("RTC lost power, lets set the time!"); 
-    rtc.adjust(DateTime(2025, 2, 4, 13, 56, 0)); 
-  } 
-}
- 
-void loop ()  
-{ 
-  char key = keypad.getKey(); 
-  
-  display_date_serial_monitor();
-  display_date_LCD(0, 0);
-
-  switch(key)
-  {
-    case 'A':
-      setTime();
+    if (key != NO_KEY && key != 'A' && key != 'C') {
+      alarm_time = 0;
+      noTone(BUZZER_PIN); 
       break;
-    case 'C':
-      isSet = 0;
-      break;
-    default:
-      //
-      break;
+    }
   }
-  delay(5000);
+ }
+}
+
+void I2C_bus_scan(void)
+{
+ Serial.println ();
+ Serial.println ("www.9arduino.com ...");
+ Serial.println ("I2C scanner. Scanning ...");
+ byte count = 0;
+ Wire.begin();
+ for (byte i = 8; i < 120; i++) // Loop ค้นหา Address
+ {
+ Wire.beginTransmission (i);
+ if (Wire.endTransmission () == 0)
+ {
+ Serial.print ("Found address: ");
+ Serial.print (i, DEC);
+ Serial.print (" (0x");
+ Serial.print (i, HEX);
+ Serial.println (")");
+ count++;
+ delay (1);
+ }
+ }
+ Serial.println ("Done.");
+ Serial.print ("Found ");
+ Serial.print (count, DEC);
+ Serial.println (" device(s).");
+}
+
+void show_time(void) {
+ now = rtc.now();
+ char timeStr[6];
+
+ lcd1.clear();
+ lcd1.setCursor(0, 0);
+ lcd1.print("Current ");
+ sprintf(timeStr, "%02d:%02d", now.hour(), now.minute());
+ lcd1.print(timeStr);
+
+ lcd1.setCursor(0, 1);
+ lcd1.print("Alarm   ");
+ sprintf(timeStr, "%02d:%02d", h, m);
+ lcd1.print(timeStr);
+ lcd1.setCursor(14, 1);
+ if (alarm_time == 1) {
+  lcd1.print("on");
+ }
+ else if (alarm_time == 0) {
+  lcd1.print("off");
+ }
+}
+
+void notime_11(void) {
+ now = rtc.now();
+ char timeStr[6];
+
+ lcd1.clear();
+ lcd1.setCursor(0, 0);
+ lcd1.print("Current ");
+ sprintf(timeStr, "%02d:%02d", now.hour(), now.minute());
+ lcd1.print(timeStr);
+
+ lcd1.setCursor(0, 1);
+ lcd1.print("Alarm   ");
+ sprintf(timeStr, " %d:%02d", h % 10, m);
+ lcd1.print(timeStr);
+ lcd1.setCursor(14, 1);
+ if (alarm_time == 1) {
+  lcd1.print("on");
+ }
+ else if (alarm_time == 0) {
+  lcd1.print("of");
+ }
+}
+
+void notime_12(void) {
+ now = rtc.now();
+ char timeStr[6];
+
+ lcd1.clear();
+ lcd1.setCursor(0, 0);
+ lcd1.print("Current ");
+ sprintf(timeStr, "%02d:%02d", now.hour(), now.minute());
+ lcd1.print(timeStr);
+
+ lcd1.setCursor(0, 1);
+ lcd1.print("Alarm   ");
+ sprintf(timeStr, "%d :%02d", h / 10, m);
+ lcd1.print(timeStr);
+ lcd1.setCursor(14, 1);
+ if (alarm_time == 1) {
+  lcd1.print("on");
+ }
+ else if (alarm_time == 0) {
+  lcd1.print("of");
+ }
+}
+
+void notime_21(void) {
+ now = rtc.now();
+ char timeStr[6];
+
+ lcd1.clear();
+ lcd1.setCursor(0, 0);
+ lcd1.print("Current ");
+ sprintf(timeStr, "%02d:%02d", now.hour(), now.minute());
+ lcd1.print(timeStr);
+
+ lcd1.setCursor(0, 1);
+ lcd1.print("Alarm   ");
+ sprintf(timeStr, "%02d: %d", h, m % 10);
+ lcd1.print(timeStr);
+ lcd1.setCursor(14, 1);
+ if (alarm_time == 1) {
+  lcd1.print("on");
+ }
+ else if (alarm_time == 0) {
+  lcd1.print("of");
+ }
+}
+
+void notime_22(void) {
+ now = rtc.now();
+ char timeStr[6];
+
+ lcd1.clear();
+ lcd1.setCursor(0, 0);
+ lcd1.print("Current ");
+ sprintf(timeStr, "%02d:%02d", now.hour(), now.minute());
+ lcd1.print(timeStr);
+
+ lcd1.setCursor(0, 1);
+ lcd1.print("Alarm   ");
+ sprintf(timeStr, "%02d:%d ", h, m / 10);
+ lcd1.print(timeStr);
+ lcd1.setCursor(14, 1);
+ if (alarm_time == 1) {
+  lcd1.print("on");
+ }
+ else if (alarm_time == 0) {
+  lcd1.print("of");
+ }
 }
