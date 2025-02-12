@@ -8,7 +8,6 @@
 LiquidCrystal lcd1( 2, 15, 17, 16, 4, 0 );
 
 RTC_DS1307 rtc;
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 DateTime now;
 
 #define BUZZER_PIN 12
@@ -50,8 +49,8 @@ void setup(){
  Wire.begin( );
  keypad.begin( );
  Serial.begin(38400);
- lcd1.begin(16, 2); // จอกว้าง 16 ตัวอักษร 2 บรรทัด
- lcd1.clear(); // ล้างหน้าจอ
+ lcd1.begin(16, 2);
+ lcd1.clear();
 
  if (! rtc.begin()) {
  Serial.println("Couldn't find RTC");
