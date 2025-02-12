@@ -82,11 +82,6 @@ void loop(){
 		break;
  }
 
- if (key != NO_KEY){
- Serial.print(key);
- Serial.println(" is pressed");
- }
-
  if (key == 'A') {
   a = 0;
   state = 0;
