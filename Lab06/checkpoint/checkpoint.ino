@@ -68,6 +68,20 @@ void loop(){
 
  show_time();
 
+ switch(key)
+ {
+	 case 'A':
+	 	//
+		break;
+	
+	case 'C':
+		alarm_time = (alarm_time == 1) ? 0 : 1;
+		break;
+	
+	default:
+		break;
+ }
+
  if (key != NO_KEY){
  Serial.print(key);
  Serial.println(" is pressed");
@@ -154,15 +168,7 @@ void loop(){
   }
  }
 
- else if (key == 'C' && alarm_time == 1) {
-  alarm_time = 0;
- }
-
-  else if (key == 'C' && alarm_time == 0) {
-  alarm_time = 1;
- }
-
- else if (now.hour() == h && now.minute() == m && alarm_time == 1) {
+ if (now.hour() == h && now.minute() == m && alarm_time == 1) {
   while (true) {
     unsigned long currentMillis = millis();
     key = keypad.getKey();
