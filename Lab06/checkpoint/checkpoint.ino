@@ -8,8 +8,7 @@
 LiquidCrystal lcd1( 2, 15, 17, 16, 4, 0 );
 
 RTC_DS1307 rtc;
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-"Saturday"};
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 DateTime now;
 
 #define BUZZER_PIN 12
@@ -25,7 +24,6 @@ char hexaKeys[ROWS][COLS] = {
 byte rowPins[ROWS] = {7, 6, 5, 4};
 byte colPins[COLS] = {3, 2, 1, 0};
 Keypad_I2C keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS, I2CADDR);
-void I2C_bus_scan(void);
 
 int h = 0;
 int m = 0;
@@ -52,7 +50,6 @@ void setup(){
  Wire.begin( );
  keypad.begin( );
  Serial.begin(38400);
- I2C_bus_scan();
  lcd1.begin(16, 2); // จอกว้าง 16 ตัวอักษร 2 บรรทัด
  lcd1.clear(); // ล้างหน้าจอ
 
@@ -196,33 +193,6 @@ void loop(){
     }
   }
  }
-}
-
-void I2C_bus_scan(void)
-{
- Serial.println ();
- Serial.println ("www.9arduino.com ...");
- Serial.println ("I2C scanner. Scanning ...");
- byte count = 0;
- Wire.begin();
- for (byte i = 8; i < 120; i++) // Loop ค้นหา Address
- {
- Wire.beginTransmission (i);
- if (Wire.endTransmission () == 0)
- {
- Serial.print ("Found address: ");
- Serial.print (i, DEC);
- Serial.print (" (0x");
- Serial.print (i, HEX);
- Serial.println (")");
- count++;
- delay (1);
- }
- }
- Serial.println ("Done.");
- Serial.print ("Found ");
- Serial.print (count, DEC);
- Serial.println (" device(s).");
 }
 
 void show_time(void) {
