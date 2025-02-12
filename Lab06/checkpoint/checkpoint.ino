@@ -65,7 +65,7 @@ void setup(){
 
  // Comment out below lines once you set the date & time.
  // Following line sets the RTC to the date & time this sketch was compiled
- rtc.adjust(DateTime(F(_DATE_), F(_TIME_))); 
+ // rtc.adjust(DateTime(F(_DATE_), F(_TIME_))); 
 
  // Following line sets the RTC with an explicit date & time
  // for example to set January 27 2017 at 12:56 you would call:
