@@ -65,8 +65,6 @@ void setup(){
 void loop(){
  char key = keypad.getKey();
  now = rtc.now();
-//  int c_h = now.hour();
-//  int c_m = now.minute();
 
  show_time();
 
@@ -202,11 +200,19 @@ void show_time(void) {
  sprintf(timeStr, "%02d:%02d", h, m);
  lcd1.print(timeStr);
  lcd1.setCursor(14, 1);
- if (alarm_time == 1) {
-  lcd1.print("on");
- }
- else if (alarm_time == 0) {
-  lcd1.print("off");
+ switch(alarm_time)
+ {
+	 case 1:
+	 	lcd1.print("On");
+		break;
+	
+	case 0:
+		lcd1.print("Off");
+		break;
+	
+	default:
+		Serial.print("Alarm time var goes wrong");
+		break;
  }
 }
 
