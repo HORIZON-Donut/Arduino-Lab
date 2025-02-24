@@ -35,7 +35,7 @@ void IRAM_ATTR onTimer(){
 void setup() {
    timer = timerBegin(0, 80, true);
    timerAttachInterrupt(timer, &onTimer, true);
-   timerAlarmWrite(timer, 1000000/15/2, true);
+   timerAlarmWrite(timer, 1000000/60/2, true);
    timerAlarmEnable(timer);
    
    for(i=0;i<2;i++){
