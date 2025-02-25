@@ -26,9 +26,18 @@ void setup() {
 }
 
 void loop() {
-  struct tm timeinfo;
-  if (getLocalTime(&timeinfo)) {
-    Serial.println(&timeinfo, "%Y-%m-%d %H:%M:%S");
-  }
   delay(1000);
+  printLocalTime();
+}
+
+void printLocalTime()
+{
+	struct tm timeinfo;
+	if(!getLocalTime(&timeinfo))
+	{
+		Serial.print("Failed to obtain time");
+
+		return;
+	}
+	Serial.println(&timeinfo, "Time: %Y-%m-%d %H:%M:%S");
 }
