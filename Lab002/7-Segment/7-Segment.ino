@@ -6,7 +6,7 @@ const int dot=20;
 int i;
 int digit=0;   
 
-int fps = 15;
+int fps = 120;
 
 hw_timer_t * timer = NULL;  /* create a hardware timer */
 
