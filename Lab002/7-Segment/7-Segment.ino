@@ -1,6 +1,3 @@
-#define SW3_1 33
-#define SW3_2 34
-
 const int DG[2]={27,14};
 const int segMentPin[7]={4,0,17,16,23,19,18};
 const int digit01[7] = {1, 1, 1, 1, 1, 1, 1};
@@ -8,7 +5,9 @@ const int digit10[7] = {1, 1, 1, 1, 1, 1, 0};
 const int dot=20;
 int i;
 int digit=0;   
+
 int fps = 15;
+
 hw_timer_t * timer = NULL;  /* create a hardware timer */
 
 void Display()
@@ -37,9 +36,6 @@ void IRAM_ATTR onTimer(){
 }
 
 void setup() {
-	pinMode(SW3_1, INPUT);
-	pinMode(SW3_2, INPUT);
-
    timer = timerBegin(0, 80, true);
    timerAttachInterrupt(timer, &onTimer, true);
    timerAlarmWrite(timer, 1000000/fps/2, true);
@@ -56,21 +52,4 @@ void setup() {
 }
 
 void loop() {  
-	int st1 = digitalRead(SW3_1);
-	int st2 = digitalRead(SW3_2);
-
-	if(st1 && st2)
-		fps = 120;
-	
-	else if (st1)
-		fps = 60;
-	
-	else if (st2)
-		fps = 30;
-	
-	else 
-		fps = 15;
-	
-	timeAlarmWrite(timer, 1000000/fps/2, true);
-
 }
