@@ -2,10 +2,10 @@
 #include "time.h"
 
 const char* ssid = "HORIZON-Donut";
-const char* pass = "AllMyFriendsHavePassAway-NeedMySelfToSingThisSong";
+const char* pass = "20040723";
 
 const char* ntpServer = "pool.ntp.org";
-const long  gmtOffset_sec = 7 * 3600;  // Thailand GMT+7
+const long  gmtOffset_sec = 3600;  // Thailand GMT+7
 const int   daylightOffset_sec = 0;
 
 void setup() {
