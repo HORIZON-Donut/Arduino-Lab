@@ -1,47 +1,45 @@
 #include <WiFi.h>
-#include <PubSubClient.h>
+#include "ThingSpeak.h" // always include thingspeak header file after other header files and custom macros
 
-// WiFi & MQTT settings
-const char* ssid = "HORIZON-Donut";
-const char* password = "20040723";
-const char* mqtt_server = "broker.emqx.io";
-const int mqtt_port = 1883;
-const char* mqtt_topic = "esp32 analog data";
-
-WiFiClient espClient;
-PubSubClient client(espClient);
+WiFiClient  client;
+const int LED=32;
+const char *ssid = "HORIZON-Donut";
+const char *password = "20040723";
+unsigned long myChannelNumber = 2862145;
+const char * myWriteAPIKey = "INOHK3QWRWJW4223";
 
 void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
+  pinMode(LED,OUTPUT);
+  digitalWrite(LED,HIGH);
+  WiFi.mode(WIFI_STA);
+  ThingSpeak.begin(client);  // Initialize ThingSpeak
+  WiFi.begin(ssid,password);
+  Serial.println("Connecting Wifi...");
+  while(WiFi.status() != WL_CONNECTED) {
+    Serial.println("");
+    Serial.println("WiFi not CONNECTED");
+    delay(500);
   }
-  Serial.println("Connected!");
-
-  client.setServer(mqtt_server, mqtt_port);
-  while (!client.connected()) {
-    Serial.println("Connecting to MQTT...");
-    if (client.connect("ESP32Client")) {
-      Serial.println("Connected to MQTT!");
-    } else {
-      Serial.print("Failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" retrying...");
-      delay(2000);
-    }
-  }
+  digitalWrite(LED,LOW);    
+  Serial.println ("Wifi CONNECTED");
 }
 
 void loop() {
-  int analogValue = hallRead();  // Read from analog pin 34
-  char msg[10];
-  sprintf(msg, "%d", analogValue);
-  
-  Serial.print("Publishing: ");
-  Serial.println(msg);
-  
-  client.publish(mqtt_topic, msg);
-  delay(2000);  // Publish every 2 seconds
+  if(WiFi.status() == WL_CONNECTED) {
+    digitalWrite(LED,!digitalRead(LED));    
+    ThingSpeak.setField(1, analogRead(A0));
+    ThingSpeak.setField(2, hallRead());    
+    int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
+    if(x == 200){
+       Serial.println("Channel update successful.");
+    }
+    else{
+      Serial.println("Problem updating channel. HTTP error code " + String(x));
+    }    
+  }
+  else
+  { digitalWrite(LED,HIGH);
+  }  
+  delay(15000);
 }
