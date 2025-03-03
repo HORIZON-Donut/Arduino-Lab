@@ -5,8 +5,8 @@ WiFiClient  client;
 const int LED=32;
 const char *ssid = "HORIZON-Donut";
 const char *password = "20040723";
-unsigned long myChannelNumber = 205332;
-const char * myWriteAPIKey = "1O4Q5ME3FXERCTCZ";
+unsigned long myChannelNumber = 2860416;
+const char * myWriteAPIKey = "OJ8HJ0X2ATDRNMWO";
 
 void setup() {
   Serial.begin(115200);
