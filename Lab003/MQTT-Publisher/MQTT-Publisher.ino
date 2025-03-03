@@ -4,7 +4,7 @@
 // Update these with values suitable for your network.
 
 const char* ssid = "HORIZON-Donut";
-const char* password = "2004723";
+const char* password = "20040723";
 
 
 const char* mqtt_broker = "re065841.ala.dedicated.aws.emqxcloud.com";
