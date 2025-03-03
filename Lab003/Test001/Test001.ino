@@ -2,8 +2,8 @@
 
 WiFiClient  client;
 const int LED=32;
-const char *ssid = “XXXXX";
-const char *password = “YYYYY";
+const char *ssid = "HORIZON-Donut";
+const char *password = "20040723";
 
 void setup() {
   Serial.begin(115200);
