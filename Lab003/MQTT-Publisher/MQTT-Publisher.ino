@@ -3,7 +3,7 @@
 
 // WiFi & MQTT settings
 const char* ssid = "HORIZON-Donut";
-const char* password = "20040723"
+const char* password = "20040723";
 const char* mqtt_server = "broker.emqx.io";
 const int mqtt_port = 1883;
 const char* mqtt_topic = "esp32 analog data";
