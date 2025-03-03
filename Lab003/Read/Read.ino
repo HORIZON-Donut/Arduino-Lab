@@ -6,7 +6,7 @@ const int LED=32;
 const char *ssid = "HORIZON-Donut";
 const char *password = "20040723";
 unsigned long myChannelNumber = 2860416;
-const char * myWriteAPIKey = "OJ8HJ0X2ATDRNMWO";
+const char * myReadAPIKey = "IWZMTSVHYXTXM4G2";
 
 void setup() {
   Serial.begin(115200);
@@ -28,16 +28,12 @@ void setup() {
 void loop() {
   if(WiFi.status() == WL_CONNECTED) {
     digitalWrite(LED,!digitalRead(LED));    
-    ThingSpeak.setField(1, analogRead(A0));
-    ThingSpeak.setField(2, hallRead());    
-    int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
-    if(x == 200){
-       Serial.println("Channel update successful.");
-    }
-    else{
-      Serial.println("Problem updating channel. HTTP error code " + String(x));
-    }    
-  }
+    long field01 = ThingSpeak.readField(myChannelNumber, 1, myReadAPIKey);
+    long field10 = ThingSpeak.readField(myChannelNumber, 2, myReadAPIKey);
+    Serial.print("Feild 01: ");
+    Serial.println(feild01);
+    Serial.print("Feild 10: ");
+    Serial.println(feild10);
   else
   { digitalWrite(LED,HIGH);
   }  
