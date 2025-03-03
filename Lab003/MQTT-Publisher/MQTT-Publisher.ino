@@ -2,11 +2,11 @@
 #include <PubSubClient.h>
 
 // WiFi & MQTT settings
-const char* ssid = "WiFi_SSID";
-const char* password = "WiFi_PASSWORD";
+const char* ssid = "HORIZON-Donut";
+const char* password = "20040723"
 const char* mqtt_server = "broker.emqx.io";
 const int mqtt_port = 1883;
-const char* mqtt_topic = "esp32/analog";
+const char* mqtt_topic = "esp32 analog data";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -35,7 +35,7 @@ void setup() {
 }
 
 void loop() {
-  int analogValue = analogRead(34);  // Read from analog pin 34
+  int analogValue = hallRead();  // Read from analog pin 34
   char msg[10];
   sprintf(msg, "%d", analogValue);
   
