@@ -1,66 +1,83 @@
+#include <WiFi.h>
+//#include <WiFiClientSecure.h>
 #include <PubSubClient.h>
 
-// WiFi-Verbindung
+#define BUILTIN_LED 32
+// Update these with values suitable for your network.
+
 const char* ssid = "HORIZON-Donut";
-const char* password = "20040723";
-WiFiClient wifiClient;
+const char* password = "2004723";
 
-// MQTT-Verbindung
-const char* mqtt_server = "mqtt3.thingspeak.com";
-const char* mqtt_username = "NjEeOww2Mwk4Jgk6NSs1ACA";
-const char* mqtt_password = "0tLxmHBOpGzmDJeiuGh/B0ot";
-const char* mqtt_id = "2862145";
-const char* topic = "channels/2862145/publish/INOHK3QWRWJW4223";
-//PubSubClient client(wifiClient);
 
-PubSubClient client(mqtt_server, 1883, wifiClient);
+const char* mqtt_broker = "re065841.ala.dedicated.aws.emqxcloud.com";
+const char *topic = "Hall data";
+const char *mqtt_username = "6510110608";
+const char *mqtt_password = "1234567890";
+const int mqtt_port = "XXXX";
+String client_id = "6510110608";
 
-// BMP180-Sensor
-Adafruit_BMP085 bmp;
+WiFiClient espClient;
+//WiFiClientSecure espClient;
+PubSubClient client(espClient);
 
 void setup() {
-  Serial.begin(115200);
-  delay(10);
+ // Set software serial baud to 115200;
+ Serial.begin(115200);
+ // connecting to a WiFi network
+ WiFi.begin(ssid, password);
+ Serial.println("");
+ Serial.print("Connecting to WiFi ");
+ while (WiFi.status() != WL_CONNECTED) {
+     Serial.print(".");
+     delay(500);     
+ }
+ Serial.println("");
+ Serial.print("IP address: ");
+ Serial.println(WiFi.localIP());
   
-  // WLAN verbinden
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println("Connecting to WiFi...");
-  }
-  Serial.println("Connected to WiFi");
+ //connecting to a mqtt broker
+ client.setServer(mqtt_broker, mqtt_port);
+ client.setCallback(callback);
+ while (!client.connected()) {
+     
+     client_id += String(WiFi.macAddress());
+     Serial.printf("The client %s connects to the public mqtt broker\n", client_id.c_str());
+     if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
+         Serial.println("Public emqx mqtt broker connected");
+     } else {
+         Serial.print("failed with state ");
+         Serial.println(client.state());
+         delay(2000);
+     }
+ }
+ // publish and subscribe
+ client.publish(topic, "Hi EMQ X I'm ESP32 ^^");
+ client.subscribe(topic);
+}
 
-  // MQTT-Verbindung
-  client.setServer(mqtt_server, 1883);
-  while (!client.connected()) {
-    Serial.println("Connecting to MQTT Broker...");
-    if (client.connect(mqtt_id, mqtt_username, mqtt_password )) {
-      Serial.println("Connected to MQTT Broker");
-    } else {
-      Serial.print("Failed with state ");
-      Serial.println(client.state());
-      delay(2000);
-    }
-  }
-  
-  // BMP180 initialisieren
-  if (!bmp.begin()) {
-    Serial.println("Could not find a valid BMP180 sensor, check wiring!");
-    while (1) {}
-  }
+void callback(char *topic, byte *payload, unsigned int length) {
+ Serial.print("Message arrived in topic: ");
+ Serial.println(topic);
+ Serial.print("Message:");
+ for (int i = 0; i < length; i++) {
+     Serial.print((char) payload[i]);
+ }
+ Serial.println();
+ Serial.println("-----------------------");
 }
 
 void loop() {
-  // Temperatur auslesen
-  float hall = hallRead();
-
-  // Temperatur über MQTT veröffentlichen
-  String payload = String("field1=") + String(hall);
-  client.publish(topic, payload.c_str());
-mqttPublish 
-  Serial.print("Temperature: ");
-  Serial.print(temperature);
-  Serial.println(" *C");
-
-  delay(10000); // 10 Sekunden warten
+ client.loop();
+ delay(5000);
+  if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
+         Serial.println("Public emqx mqtt broker connected");
+         client.subscribe("outTopic");
+         client.subscribe("inTopic");
+         client.subscribe("Hello MQTT");
+  } 
+  else {
+         Serial.print("failed with state ");
+         Serial.println(client.state());
+         delay(2000);
+  }
 }
