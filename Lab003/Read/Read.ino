@@ -28,8 +28,8 @@ void setup() {
 void loop() {
   if(WiFi.status() == WL_CONNECTED) {
     digitalWrite(LED,!digitalRead(LED));    
-    long field01 = ThingSpeak.readField(myChannelNumber, 1, myReadAPIKey);
-    long field10 = ThingSpeak.readField(myChannelNumber, 2, myReadAPIKey);
+    long field01 = ThingSpeak.readLongField(myChannelNumber, 1, myReadAPIKey);
+    long field10 = ThingSpeak.readLongField(myChannelNumber, 2, myReadAPIKey);
     Serial.print("Feild 01: ");
     Serial.println(feild01);
     Serial.print("Feild 10: ");
