@@ -1,19 +1,17 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-// Replace with your own credentials
-const char* ssid = "HORIZON-Donut";  // WiFi SSID
-const char* password = "20040723";  // WiFi Password
+const char* ssid = "HORIZON-Donut";
+const char* password = "20040723";
 
 // ThingSpeak MQTT settings
 const char* mqtt_server = "mqtt.thingspeak.com";
 const int mqtt_port = 1883;
-const char* mqtt_user = "YourThingSpeakAPIKey";  // Replace with your ThingSpeak API Key
-const char* mqtt_pass = "";  // No password needed
-const char* mqtt_client_id = "ESP32Client";  // Unique client ID
-const char* mqtt_topic = "channels/2860416/publish/YOUR_WRITE_API_KEY";  // Topic to publish to (replace with your API Key)
-const char* subscribe_topic = "channels/2860416/subscribe/YOUR_READ_API_KEY";  // Topic to subscribe to (replace with your API Key)
-
+const char* mqtt_user = "NjEeOww2Mwk4Jgk6NSs1ACA";
+const char* mqtt_pass = "0tLxmHBOpGzmDJeiuGh/B0ot";
+const char* mqtt_client_id = "NjEeOww2Mwk4Jgk6NSs1ACA";
+const char* mqtt_topic = "channels/2860416/publish/INOHK3QWRWJW4223";
+const char* subscribe_topic = "channels/2860416/subscribe/MYRPM7AENBOAYJJZ";
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -63,7 +61,7 @@ void setup() {
 
 void loop() {
   // Publish data to ThingSpeak
-  String payload = "field1=" + String(random(0, 1024));  // Random data for field1
+  String payload = "hall = " + hallRead();  // data for field1
   if (client.publish(mqtt_topic, payload.c_str())) {
     Serial.println("Data published to ThingSpeak: " + payload);
   } else {
