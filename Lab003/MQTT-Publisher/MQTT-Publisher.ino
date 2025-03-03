@@ -1,8 +1,6 @@
 #include <WiFi.h>
 //#include <WiFiClientSecure.h>
 #include <PubSubClient.h>
-
-#define BUILTIN_LED 32
 // Update these with values suitable for your network.
 
 const char* ssid = "HORIZON-Donut";
@@ -13,7 +11,7 @@ const char* mqtt_broker = "re065841.ala.dedicated.aws.emqxcloud.com";
 const char *topic = "Hall data";
 const char *mqtt_username = "6510110608";
 const char *mqtt_password = "1234567890";
-const int mqtt_port = "XXXX";
+const int mqtt_port = 1883;
 String client_id = "6510110608";
 
 WiFiClient espClient;
