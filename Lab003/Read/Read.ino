@@ -30,10 +30,19 @@ void loop() {
     digitalWrite(LED,!digitalRead(LED));    
     long field01 = ThingSpeak.readLongField(myChannelNumber, 1, myReadAPIKey);
     long field10 = ThingSpeak.readLongField(myChannelNumber, 2, myReadAPIKey);
-    Serial.print("Feild 01: ");
-    Serial.println(feild01);
-    Serial.print("Feild 10: ");
-    Serial.println(feild10);
+
+  	if(ThingSpeak.getLastReadStatus() == 200)
+  	{
+   	 Serial.print("Field 01: ");
+   	 Serial.println(field01);
+   	 Serial.print("Field 10: ");
+   	 Serial.println(field10);
+  	}
+	else
+	{
+		Serial.println("Error appear");
+	}
+  }
   else
   { digitalWrite(LED,HIGH);
   }  
