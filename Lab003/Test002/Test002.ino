@@ -6,7 +6,7 @@ const int LED=32;
 const char *ssid = "HORIZON-Donut";
 const char *password = "20040723";
 unsigned long myChannelNumber = 205332;
-const char * myWriteAPIKey = 
+const char * myWriteAPIKey = "1O4Q5ME3FXERCTCZ";
 
 void setup() {
   Serial.begin(115200);
